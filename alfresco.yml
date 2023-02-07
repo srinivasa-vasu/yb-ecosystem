@@ -1,9 +1,9 @@
 version: '3'
 services:
   yugabytedb:
-    name: yugabytedb
+    container_name: yugabytedb
     image: yugabytedb/yugabyte
-    command: bin/yugabyted start --daemon=false
+    command: bin/yugabyted start --advertise_address=0.0.0.0 --daemon=false
     ports:
       - 7000:7000
       - 9000:9000
