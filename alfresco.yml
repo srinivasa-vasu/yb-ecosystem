@@ -1,19 +1,5 @@
 version: '3'
 services:
-  yugabytedb:
-    image: yugabytedb/yugabyte
-    command: bin/yugabyted start --daemon=false
-    ports:
-      - 7000:7000
-      - 9000:9000
-      - 5433:5433
-      - 9042:9042
-      - 13000:13000
-      - 12000:12000
-    environment:
-      - YSQL_PASSWORD=alfresco
-      - YSQL_USER=alfresco
-      - YSQL_DB=alfresco
   alfresco:
     image: docker.io/alfresco/alfresco-content-repository-community
     mem_limit: 1900m
@@ -29,7 +15,7 @@ services:
         -Dmetadata-keystore.metadata.algorithm=DESede
       JAVA_OPTS: >-
         -Ddb.driver=org.postgresql.Driver -Ddb.username=alfresco
-        -Ddb.password=alfresco -Ddb.url=jdbc:postgresql://yugabytedb:5433/alfresco
+        -Ddb.password=alfresco -Ddb.url=jdbc:postgresql://127.0.0.1:5433/alfresco
         -Dshare.host=127.0.0.1 -Dshare.port=8080 -Dalfresco.host=localhost
         -Dalfresco.port=8080 -Dcsrf.filter.enabled=false -Dmessaging.subsystem.autoStart=false
         -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80
