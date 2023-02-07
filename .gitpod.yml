@@ -1,0 +1,5 @@
+tasks:
+  - init: |
+      docker-compose pull -f alfresco.yml
+  - command: |
+      docker-compose up -f alfresco.yml
