@@ -1,17 +1,10 @@
-image: gitpod/workspace-yugabytedb-preview
-
 tasks:
   - name: ysql
     env:
-      YSQL_PASSWORD: alfresco
-      YSQL_USER: alfresco
-      YSQL_DB: alfresco
       PGPASSWORD: yugabyte
-    before: |
-      yugabyted start --base_dir=$STORE/ybd1 --advertise_address=$HOST
     command: |
       gp await-port 5433
-      ysqlsh -d alfresco
+      docker exec -it yugabytedb /home/yugabyte/tserver/bin/ysqlsh -d alfresco
   - name: alfresco
     init: |
       docker-compose -f alfresco.yml pull
