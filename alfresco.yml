@@ -11,7 +11,6 @@ services:
       - 13000:13000
       - 12000:12000
     environment:
-      - name=value
       - YSQL_PASSWORD=alfresco
       - YSQL_USER=alfresco
       - YSQL_DB=alfresco

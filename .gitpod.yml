@@ -1,5 +1,10 @@
 tasks:
-  - init: |
-      docker-compose pull -f alfresco.yml
-  - command: |
-      docker-compose up -f alfresco.yml
+  - name: ysql
+    command: |
+      gp await-port 5433
+      ysqlsh -d alfresco
+  - name: alfresco
+    init: |
+      docker-compose -f alfresco.yml pull
+    command: |
+      docker-compose -f alfresco.yml up
