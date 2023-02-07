@@ -6,6 +6,7 @@ tasks:
       YSQL_PASSWORD: alfresco
       YSQL_USER: alfresco
       YSQL_DB: alfresco
+      PGPASSWORD: yugabyte
     before: |
       yugabyted start --base_dir=$STORE/ybd1 --advertise_address=$HOST
     command: |

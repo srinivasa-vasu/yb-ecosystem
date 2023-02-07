@@ -3,6 +3,7 @@ services:
   alfresco:
     image: docker.io/alfresco/alfresco-content-repository-community
     mem_limit: 1900m
+    network_mode: host
     environment:
       JAVA_TOOL_OPTIONS: >-
         -Dencryption.keystore.type=JCEKS
