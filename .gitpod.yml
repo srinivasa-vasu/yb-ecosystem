@@ -4,7 +4,7 @@ tasks:
       PGPASSWORD: yugabyte
     command: |
       gp await-port 5433
-      docker exec -it yugabytedb /home/yugabyte/tserver/bin/ysqlsh -d alfresco
+      docker exec -e PGPASSWORD=yugabyte -it yugabytedb /home/yugabyte/tserver/bin/ysqlsh -h 0.0.0.0 -d alfresco
   - name: alfresco
     init: |
       docker-compose -f alfresco.yml pull
