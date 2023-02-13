@@ -5,14 +5,14 @@ tasks:
     command: |
       gp ports await 5432
       sleep 60
-      docker exec -e PGPASSWORD=kong -it postgres psql -d kong
+      docker exec -e PGPASSWORD=kong -it postgres psql -U kong -d kong
   - name: ysql
     env:
       PGPASSWORD: kong
     command: |
       gp ports await 5433
       sleep 60
-      docker exec -e PGPASSWORD=yugabyte -it yugabytedb /home/yugabyte/tserver/bin/ysqlsh -h 0.0.0.0 -d kong
+      docker exec -e PGPASSWORD=yugabyte -it yugabytedb /home/yugabyte/tserver/bin/ysqlsh -h 0.0.0.0 -U kong -d kong
   - name: kong-gateway
     init: |
       docker-compose -f kong-gateway.yml pull
