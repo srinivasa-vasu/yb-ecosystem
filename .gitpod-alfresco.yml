@@ -1,0 +1,13 @@
+tasks:
+  - name: ysql
+    env:
+      PGPASSWORD: yugabyte
+    command: |
+      gp await-port 5433
+      sleep 60
+      docker exec -e PGPASSWORD=yugabyte -it yugabytedb /home/yugabyte/tserver/bin/ysqlsh -h 0.0.0.0 -d alfresco
+  - name: alfresco
+    init: |
+      docker-compose -f alfresco.yml pull
+    command: |
+      docker-compose -f alfresco.yml up
