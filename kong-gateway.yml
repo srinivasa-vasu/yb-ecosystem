@@ -151,7 +151,7 @@ services:
       - POSTGRESQL_DATABASE=kong
   kong-ysql:
     container_name: kong-ysql
-    image: docker.io/bitnami/kong:3
+    image: kong/kong-gateway:3.2.1.0
     ports:
       - 8000:8000
       - 8443:8443
