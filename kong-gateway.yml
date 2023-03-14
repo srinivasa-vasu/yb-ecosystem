@@ -162,7 +162,7 @@ services:
       - KONG_PG_PORT=5433
   kong-psql:
     container_name: kong-psql
-    image: docker.io/bitnami/kong:3
+    image: kong/kong-gateway:3.2.1.0
     ports:
       - 15000:15000
       - 15001:15001
