@@ -127,14 +127,6 @@
 
 
 version: '3'
-psql-config: &psql-config
-  KONG_PG_HOST: postgresql
-  KONG_PG_PASSWORD: kong
-  KONG_PG_PORT: 5432
-ysql-config: &ysql-config
-  KONG_PG_HOST: yugabytedb
-  KONG_PG_PASSWORD: kong
-  KONG_PG_PORT: 5433
 services:
   yugabytedb:
     container_name: yugabytedb
@@ -162,7 +154,9 @@ services:
     image: kong/kong-gateway:3.2.1.0
     command: kong migrations bootstrap
     environment:
-      <<: *ysql-config
+      - KONG_PG_HOST=yugabytedb
+      - KONG_PG_PASSWORD=kong
+      - KONG_PG_PORT=5433
   kong-ysql-migrate-up:
     container_name: kong-ysql-migrate-up
     image: kong/kong-gateway:3.2.1.0
@@ -170,7 +164,9 @@ services:
     depends_on:
       - kong-ysql-migrate-bootstrap
     environment:
-      <<: *ysql-config
+      - KONG_PG_HOST=yugabytedb
+      - KONG_PG_PASSWORD=kong
+      - KONG_PG_PORT=5433
   kong-ysql:
     container_name: kong-ysql
     image: kong/kong-gateway:3.2.1.0
@@ -192,7 +188,9 @@ services:
     image: kong/kong-gateway:3.2.1.0
     command: kong migrations bootstrap
     environment:
-      <<: *psql-config
+      - KONG_PG_HOST=postgresql
+      - KONG_PG_PASSWORD=kong
+      - KONG_PG_PORT=5432
   kong-psql-migrate-up:
     container_name: kong-psql-migrate-up
     image: kong/kong-gateway:3.2.1.0
@@ -200,7 +198,9 @@ services:
     depends_on:
       - kong-psql-migrate-bootstrap
     environment:
-      <<: *psql-config
+      - KONG_PG_HOST=postgresql
+      - KONG_PG_PASSWORD=kong
+      - KONG_PG_PORT=5432
   kong-psql:
     container_name: kong-psql
     image: kong/kong-gateway:3.2.1.0
