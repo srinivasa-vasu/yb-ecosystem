@@ -161,7 +161,7 @@ services:
     depends_on:
       yugabytedb:
         condition: service_healthy
-    command: kong migrations bootstrap
+    command: kong migrations bootstrap --vv
     environment:
       - KONG_PG_HOST=yugabytedb
       - KONG_PG_PASSWORD=kong
@@ -169,7 +169,7 @@ services:
   kong-ysql-migrate-up:
     container_name: kong-ysql-migrate-up
     image: kong/kong-gateway:3.2.1.0
-    command: kong migrations up && kong migrations finish
+    command: kong migrations up --vv && kong migrations finish --vv
     depends_on:
       - kong-ysql-migrate-bootstrap
     environment:
@@ -195,7 +195,7 @@ services:
   kong-psql-migrate-bootstrap:
     container_name: kong-psql-migrate-bootstrap
     image: kong/kong-gateway:3.2.1.0
-    command: kong migrations bootstrap
+    command: kong migrations bootstrap --vv
     environment:
       - KONG_PG_HOST=postgresql
       - KONG_PG_PASSWORD=kong
