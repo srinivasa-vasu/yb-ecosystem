@@ -138,6 +138,12 @@ services:
       - YSQL_PASSWORD=kong
       - YSQL_USER=kong
       - YSQL_DB=kong
+    healthcheck:
+      test: curl -t '' --fail telnet://$(hostname -i):5433; if [[ $$? == 49 ]]; then echo 0; else echo 1; fi
+      interval: 10s
+      timeout: 5s
+      start_period: 15s
+      retries: 5
   postgresql:
     container_name: postgres
     image: docker.io/bitnami/postgresql:14
@@ -152,6 +158,9 @@ services:
   kong-ysql-migrate-bootstrap:
     container_name: kong-ysql-migrate-bootstrap
     image: kong/kong-gateway:3.2.1.0
+    depends_on:
+      yugabytedb:
+        condition: service_healthy
     command: kong migrations bootstrap
     environment:
       - KONG_PG_HOST=yugabytedb
