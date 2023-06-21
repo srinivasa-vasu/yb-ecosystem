@@ -130,7 +130,7 @@ version: '3'
 services:
   yugabytedb:
     container_name: yugabytedb
-    image: yugabytedb/yugabyte:2.19.0.0-b190
+    image: yugabytedb/yugabyte:${YBDB_VERSION}
     command: bin/yugabyted start --advertise_address=0.0.0.0 --daemon=false
     ports:
       - 5433:5433
@@ -146,7 +146,7 @@ services:
       retries: 5
   postgresql:
     container_name: postgres
-    image: docker.io/bitnami/postgresql:14
+    image: docker.io/bitnami/postgresql:${PG_VERSION}
     ports:
       - 5432:5432
     volumes:
@@ -157,19 +157,19 @@ services:
       - POSTGRESQL_DATABASE=kong
   kong-ysql-migrate-bootstrap:
     container_name: kong-ysql-migrate-bootstrap
-    image: kong/kong-gateway:3.2.1.0
+    image: kong/kong-gateway:${KONG_VERSION}
     depends_on:
       yugabytedb:
         condition: service_healthy
-    command: kong migrations bootstrap --vv
+    command: kong migrations bootstrap ${DEBUG}
     environment:
       - KONG_PG_HOST=yugabytedb
       - KONG_PG_PASSWORD=kong
       - KONG_PG_PORT=5433
   kong-ysql-migrate-up:
     container_name: kong-ysql-migrate-up
-    image: kong/kong-gateway:3.2.1.0
-    command: kong migrations up --vv && kong migrations finish --vv
+    image: kong/kong-gateway:${KONG_VERSION}
+    command: kong migrations up ${DEBUG} && kong migrations finish ${DEBUG}
     depends_on:
       - kong-ysql-migrate-bootstrap
     environment:
@@ -178,7 +178,7 @@ services:
       - KONG_PG_PORT=5433
   kong-ysql:
     container_name: kong-ysql
-    image: kong/kong-gateway:3.2.1.0
+    image: kong/kong-gateway:${KONG_VERSION}
     depends_on:
       - kong-ysql-migrate-up
     ports:
@@ -194,15 +194,15 @@ services:
       - KONG_ADMIN_GUI_URL=http://localhost:8002
   kong-psql-migrate-bootstrap:
     container_name: kong-psql-migrate-bootstrap
-    image: kong/kong-gateway:3.2.1.0
-    command: kong migrations bootstrap --vv
+    image: kong/kong-gateway:${KONG_VERSION}
+    command: kong migrations bootstrap ${DEBUG}
     environment:
       - KONG_PG_HOST=postgresql
       - KONG_PG_PASSWORD=kong
       - KONG_PG_PORT=5432
   kong-psql-migrate-up:
     container_name: kong-psql-migrate-up
-    image: kong/kong-gateway:3.2.1.0
+    image: kong/kong-gateway:${KONG_VERSION}
     command: kong migrations up && kong migrations finish
     depends_on:
       - kong-psql-migrate-bootstrap
@@ -212,7 +212,7 @@ services:
       - KONG_PG_PORT=5432
   kong-psql:
     container_name: kong-psql
-    image: kong/kong-gateway:3.2.1.0
+    image: kong/kong-gateway:${KONG_VERSION}
     depends_on:
       - kong-psql-migrate-up
     ports:
