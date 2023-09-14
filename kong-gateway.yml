@@ -144,17 +144,17 @@ services:
       timeout: 5s
       start_period: 15s
       retries: 5
-  postgresql:
-    container_name: postgres
-    image: docker.io/bitnami/postgresql:${PG_VERSION}
-    ports:
-      - 5432:5432
-    volumes:
-      - postgresql_data:/bitnami/postgresql
-    environment:
-      - POSTGRESQL_USERNAME=kong
-      - POSTGRESQL_PASSWORD=kong
-      - POSTGRESQL_DATABASE=kong
+  # postgresql:
+  #   container_name: postgres
+  #   image: docker.io/bitnami/postgresql:${PG_VERSION}
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - postgresql_data:/bitnami/postgresql
+  #   environment:
+  #     - POSTGRESQL_USERNAME=kong
+  #     - POSTGRESQL_PASSWORD=kong
+  #     - POSTGRESQL_DATABASE=kong
   kong-ysql-migrate-bootstrap:
     container_name: kong-ysql-migrate-bootstrap
     image: kong/kong-gateway:${KONG_VERSION}
@@ -192,42 +192,42 @@ services:
       - KONG_PG_PORT=5433
       - KONG_ADMIN_LISTEN=0.0.0.0:8001
       - KONG_ADMIN_GUI_URL=http://localhost:8002
-  kong-psql-migrate-bootstrap:
-    container_name: kong-psql-migrate-bootstrap
-    image: kong/kong-gateway:${KONG_VERSION}
-    command: kong migrations ${DEBUG} bootstrap
-    environment:
-      - KONG_PG_HOST=postgresql
-      - KONG_PG_PASSWORD=kong
-      - KONG_PG_PORT=5432
-  kong-psql-migrate-up:
-    container_name: kong-psql-migrate-up
-    image: kong/kong-gateway:${KONG_VERSION}
-    command: kong migrations ${DEBUG} up && kong migrations ${DEBUG} finish
-    depends_on:
-      - kong-psql-migrate-bootstrap
-    environment:
-      - KONG_PG_HOST=postgresql
-      - KONG_PG_PASSWORD=kong
-      - KONG_PG_PORT=5432
-  kong-psql:
-    container_name: kong-psql
-    image: kong/kong-gateway:${KONG_VERSION}
-    depends_on:
-      - kong-psql-migrate-up
-    ports:
-      - 15000:15000
-      - 15001:15001
-      - 15002:15002
-      - 15005:15005
-    environment:
-      - KONG_PG_HOST=postgresql
-      - KONG_PG_PASSWORD=kong
-      - KONG_PG_PORT=5432
-      - KONG_PROXY_HTTP_PORT_NUMBER=15000
-      - KONG_PROXY_HTTPS_PORT_NUMBER=15005
-      - KONG_ADMIN_LISTEN=0.0.0.0:15001
-      - KONG_ADMIN_GUI_URL=http://localhost:15002
+  # kong-psql-migrate-bootstrap:
+  #   container_name: kong-psql-migrate-bootstrap
+  #   image: kong/kong-gateway:${KONG_VERSION}
+  #   command: kong migrations ${DEBUG} bootstrap
+  #   environment:
+  #     - KONG_PG_HOST=postgresql
+  #     - KONG_PG_PASSWORD=kong
+  #     - KONG_PG_PORT=5432
+  # kong-psql-migrate-up:
+  #   container_name: kong-psql-migrate-up
+  #   image: kong/kong-gateway:${KONG_VERSION}
+  #   command: kong migrations ${DEBUG} up && kong migrations ${DEBUG} finish
+  #   depends_on:
+  #     - kong-psql-migrate-bootstrap
+  #   environment:
+  #     - KONG_PG_HOST=postgresql
+  #     - KONG_PG_PASSWORD=kong
+  #     - KONG_PG_PORT=5432
+  # kong-psql:
+  #   container_name: kong-psql
+  #   image: kong/kong-gateway:${KONG_VERSION}
+  #   depends_on:
+  #     - kong-psql-migrate-up
+  #   ports:
+  #     - 15000:15000
+  #     - 15001:15001
+  #     - 15002:15002
+  #     - 15005:15005
+  #   environment:
+  #     - KONG_PG_HOST=postgresql
+  #     - KONG_PG_PASSWORD=kong
+  #     - KONG_PG_PORT=5432
+  #     - KONG_PROXY_HTTP_PORT_NUMBER=15000
+  #     - KONG_PROXY_HTTPS_PORT_NUMBER=15005
+  #     - KONG_ADMIN_LISTEN=0.0.0.0:15001
+  #     - KONG_ADMIN_GUI_URL=http://localhost:15002
 
 volumes:
   postgresql_data:

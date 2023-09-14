@@ -1,11 +1,11 @@
 tasks:
-  - name: psql
-    env:
-      PGPASSWORD: kong
-    command: |
-      gp ports await 5432
-      sleep 10
-      docker exec -e PGPASSWORD=${PGPASSWORD} -it postgres psql -U kong -d kong
+  # - name: psql
+  #   env:
+  #     PGPASSWORD: kong
+  #   command: |
+  #     gp ports await 5432
+  #     sleep 10
+  #     docker exec -e PGPASSWORD=${PGPASSWORD} -it postgres psql -U kong -d kong
   - name: ysql
     env:
       PGPASSWORD: kong
@@ -20,6 +20,10 @@ tasks:
       PG_VERSION: 14
       DEBUG: "--vv"
     init: |
-      sudo docker compose -f kong-gateway.yml pull
+      docker compose --env-file .envc -f kong-gateway.yml pull
     command: |
-      sudo docker compose -f kong-gateway.yml up
+      docker compose --env-file .envc -f kong-gateway.yml up
+
+vscode:
+  extensions:
+    - ms-azuretools.vscode-docker
