@@ -161,7 +161,7 @@ services:
     depends_on:
       yugabytedb:
         condition: service_healthy
-    command: kong migrations bootstrap ${DEBUG}
+    command: kong migrations ${DEBUG} bootstrap
     environment:
       - KONG_PG_HOST=yugabytedb
       - KONG_PG_PASSWORD=kong
@@ -169,7 +169,7 @@ services:
   kong-ysql-migrate-up:
     container_name: kong-ysql-migrate-up
     image: kong/kong-gateway:${KONG_VERSION}
-    command: kong migrations up ${DEBUG} && kong migrations finish ${DEBUG}
+    command: kong migrations ${DEBUG} up && kong migrations ${DEBUG} finish
     depends_on:
       - kong-ysql-migrate-bootstrap
     environment:
@@ -195,7 +195,7 @@ services:
   kong-psql-migrate-bootstrap:
     container_name: kong-psql-migrate-bootstrap
     image: kong/kong-gateway:${KONG_VERSION}
-    command: kong migrations bootstrap ${DEBUG}
+    command: kong migrations ${DEBUG} bootstrap
     environment:
       - KONG_PG_HOST=postgresql
       - KONG_PG_PASSWORD=kong
@@ -203,7 +203,7 @@ services:
   kong-psql-migrate-up:
     container_name: kong-psql-migrate-up
     image: kong/kong-gateway:${KONG_VERSION}
-    command: kong migrations up && kong migrations finish
+    command: kong migrations ${DEBUG} up && kong migrations ${DEBUG} finish
     depends_on:
       - kong-psql-migrate-bootstrap
     environment:
