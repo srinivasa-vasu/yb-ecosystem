@@ -20,6 +20,6 @@ tasks:
       PG_VERSION: 14
       DEBUG: "--vv"
     init: |
-      docker compose -f kong-gateway.yml pull
+      sudo docker compose -f kong-gateway.yml pull
     command: |
-      docker compose -f kong-gateway.yml up
+      sudo docker compose -f kong-gateway.yml up
