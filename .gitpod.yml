@@ -15,7 +15,7 @@ tasks:
       docker exec -e PGPASSWORD=kong -it yugabytedb /home/yugabyte/tserver/bin/ysqlsh -h 0.0.0.0 -U kong -d kong
   - name: kong-gateway
     env:
-      YBDB_VERSION: 2.19.2.0-b121
+      YBDB_VERSION: 2.18.2.1-b1
       KONG_VERSION: 3.3.0.0
       PG_VERSION: 14
       DEBUG: "--vv"
