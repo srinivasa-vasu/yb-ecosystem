@@ -8,6 +8,10 @@ tasks:
   #     gp ports await 5432
   #     sleep 10
   #     docker exec -e PGPASSWORD=${PGPASSWORD} -it postgres psql -U kong -d kong
+  - name: ybdb
+    command: |
+      mkdir -p ${GITPOD_REPO_ROOT}/ybdb
+      yugabyted start --base_dir=${GITPOD_REPO_ROOT}/ybdb --advertise_address=$HOST --background=false
   - name: init-sql
     command: |
       gp ports await 5433

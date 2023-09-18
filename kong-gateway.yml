@@ -166,6 +166,8 @@ services:
       - KONG_PG_HOST=host.docker.internal
       - KONG_PG_PASSWORD=kong
       - KONG_PG_PORT=5433
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   kong-ysql-migrate-up:
     container_name: kong-ysql-migrate-up
     image: kong/kong-gateway:${KONG_VERSION}
@@ -176,6 +178,8 @@ services:
       - KONG_PG_HOST=host.docker.internal
       - KONG_PG_PASSWORD=kong
       - KONG_PG_PORT=5433
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   kong-ysql:
     container_name: kong-ysql
     image: kong/kong-gateway:${KONG_VERSION}
@@ -192,6 +196,8 @@ services:
       - KONG_PG_PORT=5433
       - KONG_ADMIN_LISTEN=0.0.0.0:8001
       - KONG_ADMIN_GUI_URL=http://localhost:8002
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   # kong-psql-migrate-bootstrap:
   #   container_name: kong-psql-migrate-bootstrap
   #   image: kong/kong-gateway:${KONG_VERSION}
@@ -229,8 +235,6 @@ services:
   #     - KONG_ADMIN_LISTEN=0.0.0.0:15001
   #     - KONG_ADMIN_GUI_URL=http://localhost:15002
 
-extra_hosts:
-  - "host.docker.internal:host-gateway"
 volumes:
   postgresql_data:
     driver: local
