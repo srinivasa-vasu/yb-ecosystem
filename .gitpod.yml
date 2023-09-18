@@ -23,7 +23,7 @@ tasks:
       PGPASSWORD: kong
     command: |
       gp ports await 5433
-      sleep 20
+      sleep 5
       ysqlsh
   - name: kong-gateway
     env:
