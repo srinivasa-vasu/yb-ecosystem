@@ -1,3 +1,5 @@
+image:
+  file: .ybdb.Dockerfile
 tasks:
   # - name: psql
   #   env:
@@ -6,13 +8,19 @@ tasks:
   #     gp ports await 5432
   #     sleep 10
   #     docker exec -e PGPASSWORD=${PGPASSWORD} -it postgres psql -U kong -d kong
+  - name: init-sql
+    command: |
+      gp ports await 5433
+      sleep 5
+      ysqlsh -f /home/yugabyte/init.sql
+      gp sync-done init-sql
   - name: ysql
     env:
       PGPASSWORD: kong
     command: |
       gp ports await 5433
       sleep 20
-      docker exec -e PGPASSWORD=kong -it yugabytedb /home/yugabyte/tserver/bin/ysqlsh -h 0.0.0.0 -U kong -d kong
+      ysqlsh
   - name: kong-gateway
     env:
       YBDB_VERSION: 2.18.2.1-b1
@@ -22,6 +30,7 @@ tasks:
     init: |
       docker compose --env-file .envc -f kong-gateway.yml pull
     command: |
+      gp sync-await init-sql
       docker compose --env-file .envc -f kong-gateway.yml up
 
 vscode:

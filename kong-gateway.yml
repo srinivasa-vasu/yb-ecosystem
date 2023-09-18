@@ -128,22 +128,22 @@
 
 version: '3'
 services:
-  yugabytedb:
-    container_name: yugabytedb
-    image: yugabytedb/yugabyte:${YBDB_VERSION}
-    command: bin/yugabyted start --advertise_address=0.0.0.0 --daemon=false
-    ports:
-      - 5433:5433
-    environment:
-      - YSQL_PASSWORD=kong
-      - YSQL_USER=kong
-      - YSQL_DB=kong
-    healthcheck:
-      test: curl -t '' --fail telnet://$(hostname -i):5433; if [[ $$? == 49 ]]; then echo 0; else echo 1; fi
-      interval: 10s
-      timeout: 5s
-      start_period: 15s
-      retries: 5
+  # yugabytedb:
+  #   container_name: yugabytedb
+  #   image: yugabytedb/yugabyte:${YBDB_VERSION}
+  #   command: bin/yugabyted start --advertise_address=0.0.0.0 --daemon=false
+  #   ports:
+  #     - 5433:5433
+  #   environment:
+  #     - YSQL_PASSWORD=kong
+  #     - YSQL_USER=kong
+  #     - YSQL_DB=kong
+  #   healthcheck:
+  #     test: curl -t '' --fail telnet://$(hostname -i):5433; if [[ $$? == 49 ]]; then echo 0; else echo 1; fi
+  #     interval: 10s
+  #     timeout: 5s
+  #     start_period: 15s
+  #     retries: 5
   # postgresql:
   #   container_name: postgres
   #   image: docker.io/bitnami/postgresql:${PG_VERSION}
@@ -158,12 +158,12 @@ services:
   kong-ysql-migrate-bootstrap:
     container_name: kong-ysql-migrate-bootstrap
     image: kong/kong-gateway:${KONG_VERSION}
-    depends_on:
-      yugabytedb:
-        condition: service_healthy
+    # depends_on:
+    #   yugabytedb:
+    #     condition: service_healthy
     command: kong migrations ${DEBUG} bootstrap
     environment:
-      - KONG_PG_HOST=yugabytedb
+      - KONG_PG_HOST=host.docker.internal
       - KONG_PG_PASSWORD=kong
       - KONG_PG_PORT=5433
   kong-ysql-migrate-up:
@@ -173,7 +173,7 @@ services:
     depends_on:
       - kong-ysql-migrate-bootstrap
     environment:
-      - KONG_PG_HOST=yugabytedb
+      - KONG_PG_HOST=host.docker.internal
       - KONG_PG_PASSWORD=kong
       - KONG_PG_PORT=5433
   kong-ysql:
@@ -187,7 +187,7 @@ services:
       - 8002:8002
       - 8443:8443
     environment:
-      - KONG_PG_HOST=yugabytedb
+      - KONG_PG_HOST=host.docker.internal
       - KONG_PG_PASSWORD=kong
       - KONG_PG_PORT=5433
       - KONG_ADMIN_LISTEN=0.0.0.0:8001
@@ -229,6 +229,8 @@ services:
   #     - KONG_ADMIN_LISTEN=0.0.0.0:15001
   #     - KONG_ADMIN_GUI_URL=http://localhost:15002
 
+extra_hosts:
+  - "host.docker.internal:host-gateway"
 volumes:
   postgresql_data:
     driver: local
