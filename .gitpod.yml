@@ -11,12 +11,12 @@ tasks:
   - name: ybdb
     command: |
       mkdir -p ${GITPOD_REPO_ROOT}/ybdb
-      yugabyted start --base_dir=${GITPOD_REPO_ROOT}/ybdb --advertise_address=$HOST --background=false
+      yugabyted start --base_dir=${GITPOD_REPO_ROOT}/ybdb --advertise_address=$HOST --background=true
   - name: init-sql
     command: |
       gp ports await 5433
       sleep 5
-      ysqlsh -f /home/yugabyte/init.sql
+      ysqlsh -f ${GITPOD_REPO_ROOT}/init.sql
       gp sync-done init-sql
   - name: ysql
     env:
