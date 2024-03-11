@@ -1,42 +1,13 @@
-image:
-  file: .ybdb.Dockerfile
 tasks:
-  # - name: psql
-  #   env:
-  #     PGPASSWORD: kong
-  #   command: |
-  #     gp ports await 5432
-  #     sleep 10
-  #     docker exec -e PGPASSWORD=${PGPASSWORD} -it postgres psql -U kong -d kong
-  - name: ybdb
-    command: |
-      mkdir -p ${GITPOD_REPO_ROOT}/ybdb
-      yugabyted start --base_dir=${GITPOD_REPO_ROOT}/ybdb --advertise_address=$HOST --background=true
-  - name: init-sql
-    command: |
-      gp ports await 5433
-      sleep 5
-      ysqlsh -f ${GITPOD_REPO_ROOT}/init.sql
-      gp sync-done init-sql
   - name: ysql
     env:
-      PGPASSWORD: kong
+      PGPASSWORD: yugabyte
     command: |
       gp ports await 5433
-      sleep 5
-      ysqlsh
-  - name: kong-gateway
-    env:
-      YBDB_VERSION: 2.18.2.1-b1
-      KONG_VERSION: 3.3.0.0
-      PG_VERSION: 14
-      DEBUG: "--vv"
+      sleep 60
+      docker exec -e PGPASSWORD=yugabyte -it yugabytedb /home/yugabyte/tserver/bin/ysqlsh -h 0.0.0.0 -d alfresco
+  - name: alfresco
     init: |
-      docker compose --env-file .envc -f kong-gateway.yml pull
+      docker-compose -f alfresco.yml pull
     command: |
-      gp sync-await init-sql
-      docker compose --env-file .envc -f kong-gateway.yml up
-
-vscode:
-  extensions:
-    - ms-azuretools.vscode-docker
+      docker-compose -f alfresco.yml up
