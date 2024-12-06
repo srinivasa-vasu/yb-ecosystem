@@ -6,33 +6,33 @@ x-kong-config: &kong-env
   KONG_PG_USER: ${KONG_PG_USER:-kong}
   KONG_PG_PASSWORD: ${KONG_PG_PASSWORD:-kong}
 services:
-  # yugabytedb:
-  #   container_name: yugabytedb
-  #   image: yugabytedb/yugabyte:${YBDB_VERSION}
-  #   command: bin/yugabyted start --advertise_address=0.0.0.0 --daemon=false
-  #   ports:
-  #     - 5433:5433
-  #   environment:
-  #     - YSQL_PASSWORD=kong
-  #     - YSQL_USER=kong
-  #     - YSQL_DB=kong
-  #   healthcheck:
-  #     test: curl -t '' --fail telnet://$(hostname -i):5433; if [[ $$? == 49 ]]; then echo 0; else echo 1; fi
-  #     interval: 10s
-  #     timeout: 5s
-  #     start_period: 15s
-  #     retries: 5
-  # postgresql:
-  #   container_name: postgres
-  #   image: docker.io/bitnami/postgresql:${PG_VERSION}
-  #   ports:
-  #     - 5432:5432
-  #   volumes:
-  #     - postgresql_data:/bitnami/postgresql
-  #   environment:
-  #     - POSTGRESQL_USERNAME=kong
-  #     - POSTGRESQL_PASSWORD=kong
-  #     - POSTGRESQL_DATABASE=kong
+  yugabytedb:
+    container_name: yugabytedb
+    image: yugabytedb/yugabyte:${YBDB_VERSION}
+    command: bin/yugabyted start --advertise_address=0.0.0.0 --daemon=false
+    ports:
+      - 5433:5433
+    environment:
+      - YSQL_PASSWORD=kong
+      - YSQL_USER=kong
+      - YSQL_DB=kong
+    healthcheck:
+      test: curl -t '' --fail telnet://$(hostname -i):5433; if [[ $$? == 49 ]]; then echo 0; else echo 1; fi
+      interval: 10s
+      timeout: 5s
+      start_period: 15s
+      retries: 5
+  postgresql:
+    container_name: postgres
+    image: docker.io/bitnami/postgresql:${PG_VERSION}
+    ports:
+      - 5432:5432
+    volumes:
+      - postgresql_data:/bitnami/postgresql
+    environment:
+      - POSTGRESQL_USERNAME=kong
+      - POSTGRESQL_PASSWORD=kong
+      - POSTGRESQL_DATABASE=kong
   kong-ysql-migrate-bootstrap:
     container_name: kong-ysql-migrate-bootstrap
     image: kong/kong-gateway:${KONG_VERSION}
