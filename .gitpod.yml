@@ -1,13 +1,22 @@
+image:
+  file: .ybdb.Dockerfile
 tasks:
+  # - name: psql
+  #   env:
+  #     PGPASSWORD: kong
+  #   command: |
+  #     gp ports await 5432
+  #     sleep 10
+  #     docker exec -e PGPASSWORD=kong -it postgres psql -U kong -d kong
   - name: ysql
     env:
-      PGPASSWORD: yugabyte
+      PGPASSWORD: kong
     command: |
       gp ports await 5433
-      sleep 60
-      docker exec -e PGPASSWORD=yugabyte -it yugabytedb /home/yugabyte/tserver/bin/ysqlsh -h 0.0.0.0 -d alfresco
-  - name: alfresco
+      sleep 10
+      docker exec -e PGPASSWORD=kong -it yugabytedb /home/yugabyte/tserver/bin/ysqlsh -h 0.0.0.0 -U kong -d kong
+  - name: kong-gateway
     init: |
-      docker-compose -f alfresco.yml pull
+      docker-compose -f kong-gateway.yml pull
     command: |
-      docker-compose -f alfresco.yml up
+      docker-compose -f kong-gateway.yml up
