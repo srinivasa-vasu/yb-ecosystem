@@ -14,7 +14,10 @@ tasks:
       sleep 10
       docker exec -e PGPASSWORD=kong -it yugabytedb /home/yugabyte/tserver/bin/ysqlsh -h 0.0.0.0 -U kong -d kong
   - name: kong-gateway
+    env:
+      KONG_VERSION:
     init: |
+      source .envc
       docker-compose -f kong-gateway.yml pull
     command: |
       docker-compose -f kong-gateway.yml up
